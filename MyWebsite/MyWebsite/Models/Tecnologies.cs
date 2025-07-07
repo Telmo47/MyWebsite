@@ -1,11 +1,14 @@
 ﻿namespace MyWebsite.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class Tecnologies
     {
 
         /// <summary>
         /// Id for the technologies
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>

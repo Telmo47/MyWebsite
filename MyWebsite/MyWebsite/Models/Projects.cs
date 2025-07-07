@@ -1,11 +1,15 @@
-﻿namespace MyWebsite.Models
-{
+﻿namespace MyWebsite.Models 
+{ 
+    using System.ComponentModel.DataAnnotations;
+
+
+
     public class Projects
     {
         /// <summary>
         /// Id for all the projects
         /// </summary>
-       
+        [Key]
         public int Id { get; set; }
 
         /// <summary>
