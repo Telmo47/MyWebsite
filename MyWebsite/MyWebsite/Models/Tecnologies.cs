@@ -13,5 +13,9 @@
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Navigation property to the projects
+        /// </summary>
+        public ICollection<ProjectTecnologies> ProjectTecnologies { get; set; }
     }
 }

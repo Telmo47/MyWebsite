@@ -5,6 +5,7 @@
         /// <summary>
         /// Id for all the projects
         /// </summary>
+       
         public int Id { get; set; }
 
         /// <summary>
@@ -37,7 +38,10 @@
         /// </summary>
         public DateTime CreationDate { get; set; }
 
-
+        /// <summary>
+        /// Navigation property to the technologies used in the project
+        /// </summary>
+        public ICollection<ProjectTecnologies> ProjectTecnologies { get; set; }
 
     }
 }

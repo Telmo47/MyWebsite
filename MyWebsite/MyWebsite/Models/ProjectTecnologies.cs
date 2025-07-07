@@ -11,6 +11,17 @@
         /// <summary>
         /// FK to the Tecnologies table
         /// </summary>
-        public int TecnologiesId { get; set; }
+        public int TecnologyId { get; set; }
+
+        /// <summary>
+        /// Navigation property to the Tecnologies table
+        /// </summary>
+        public Projects Projects { get; set; }
+
+        /// <summary>
+        /// Navigation property to the Tecnologies table
+        /// </summary>
+        public Tecnologies Tecnologies { get; set; }
+
     }
 }
