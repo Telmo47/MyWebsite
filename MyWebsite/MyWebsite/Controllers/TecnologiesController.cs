@@ -12,6 +12,10 @@ namespace MyWebsite.Controllers
 {
     public class TecnologiesController : Controller
     {
+
+        /// <summary>
+        /// Context for accessing the database
+        /// </summary>
         private readonly AppDbContext _context;
 
         public TecnologiesController(AppDbContext context)
