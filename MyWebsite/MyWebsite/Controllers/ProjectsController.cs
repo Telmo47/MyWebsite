@@ -12,6 +12,10 @@ namespace MyWebsite.Controllers
 {
     public class ProjectsController : Controller
     {
+
+        /// <summary>
+        /// Reference to the application database context
+        /// </summary>
         private readonly AppDbContext _context;
 
         public ProjectsController(AppDbContext context)
