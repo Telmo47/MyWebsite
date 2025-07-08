@@ -12,6 +12,9 @@ namespace MyWebsite.Controllers
 {
     public class ContactMessagesController : Controller
     {
+        /// <summary>
+        /// Context for accessing the database
+        /// </summary>
         private readonly AppDbContext _context;
 
         public ContactMessagesController(AppDbContext context)
