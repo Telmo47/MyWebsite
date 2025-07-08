@@ -8,13 +8,13 @@ namespace MyWebsite.Models
         /// <summary>
         /// FK to the Projects table
         /// </summary>
-        [Key]
+        
         public int ProjectId { get; set; }
 
         /// <summary>
         /// FK to the Tecnologies table
         /// </summary>
-        [Key]
+        
         public int TecnologyId { get; set; }
 
         /// <summary>
