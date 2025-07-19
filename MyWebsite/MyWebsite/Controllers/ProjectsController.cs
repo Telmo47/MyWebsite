@@ -83,6 +83,9 @@ namespace MyWebsite.Controllers
                 return NotFound();
             }
             return View(projects);
+
+            // Saves the data of the object in the session
+            HttpContext.Session.SetInt32("ProjectId", projects.Id);
         }
 
         // POST: Projects/Edit/5
