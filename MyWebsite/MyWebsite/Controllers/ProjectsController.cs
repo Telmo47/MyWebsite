@@ -93,17 +93,38 @@ namespace MyWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UrlGithub,UrlSite,ImageUrl,CreationDate")] Projects projects)
+
+        //Uses the [FromRoute] attribute to bind the id parameter from the route data
+        public async Task<IActionResult> Edit([FromRoute] int id, [Bind("Id,Title,Description,UrlGithub,UrlSite,ImageUrl,CreationDate")] Projects projects)
         {
             if (id != projects.Id)
             {
-                return NotFound();
+                return RedirectToAction("Index");
+            }
+
+            // Are the data I received from the session corresponding to the object sent to the browser?
+            var ProjectId = HttpContext.Session.GetInt32("ProjectId");
+
+            if (ProjectId == null)
+            {
+                // Took too long to get the data from the session, or the session has expired
+                ModelState.AddModelError(string.Empty, "Project ID not found in session." + "You must restart the process");
+                
+                return View(projects);
+            }
+
+            // Was there any adultation of the object?
+            if (projects.Id != ProjectId)
+            {
+                // The user is trying to edit a different project than the one that was loaded in the session
+                return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Saves the data in the database
                     _context.Update(projects);
                     await _context.SaveChangesAsync();
                 }
