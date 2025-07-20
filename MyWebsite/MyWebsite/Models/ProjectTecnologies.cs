@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyWebsite.Models
 {
@@ -20,12 +21,14 @@ namespace MyWebsite.Models
         /// <summary>
         /// Navigation property to the Tecnologies table
         /// </summary>
-        public Projects Projects { get; set; }
+        [ValidateNever]
+        public Projects Projects { get; set; } = null!;
 
         /// <summary>
         /// Navigation property to the Tecnologies table
         /// </summary>
-        public Tecnologies Tecnologies { get; set; }
+        [ValidateNever]
+        public Tecnologies Tecnologies { get; set; } = null!;
 
     }
 }
