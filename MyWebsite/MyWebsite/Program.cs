@@ -9,6 +9,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configure cookie policy
+builder.Services.AddSession(options =>
+{
+    // Set the session timeout to 30 minutes
+    options.IdleTimeout = TimeSpan.FromMinutes(60   );
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true; // Make the session cookie essential
+});
+
+builder.Services.AddDistributedMemoryCache(); // Add distributed memory cache for session state
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,6 +34,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession(); // Enable session middleware
 
 app.UseAuthorization();
 

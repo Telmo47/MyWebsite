@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 using MyWebsite.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MyWebsite.Controllers
 {
@@ -83,6 +84,10 @@ namespace MyWebsite.Controllers
                 return NotFound();
             }
             return View(projects);
+
+            // Saves the data of the object in the session
+            HttpContext.Session.SetInt32("ProjectId", projects.Id);
+            HttpContext.Session.SetString("ProjectTitle", projects.Title);
         }
 
         // POST: Projects/Edit/5
@@ -90,17 +95,39 @@ namespace MyWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UrlGithub,UrlSite,ImageUrl,CreationDate")] Projects projects)
+
+        //Uses the [FromRoute] attribute to bind the id parameter from the route data
+        public async Task<IActionResult> Edit([FromRoute] int id, [Bind("Id,Title,Description,UrlGithub,UrlSite,ImageUrl,CreationDate")] Projects projects)
         {
             if (id != projects.Id)
             {
-                return NotFound();
+                return RedirectToAction("Index");
+            }
+
+            // Are the data I received from the session corresponding to the object sent to the browser?
+            var ProjectId = HttpContext.Session.GetInt32("ProjectId");
+            var ProjectTitle = HttpContext.Session.GetString("ProjectTitle");
+
+            if (ProjectId == null || ProjectTitle.IsNullOrEmpty())
+            {
+                // Took too long to get the data from the session, or the session has expired
+                ModelState.AddModelError(string.Empty, "Project ID not found in session." + "You must restart the process");
+                
+                return View(projects);
+            }
+
+            // Was there any adultation of the object?
+            if (projects.Id != ProjectId || ProjectTitle != "Projects/Edit")
+            {
+                // The user is trying to edit a different project than the one that was loaded in the session
+                return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Saves the data in the database
                     _context.Update(projects);
                     await _context.SaveChangesAsync();
                 }
@@ -135,6 +162,10 @@ namespace MyWebsite.Controllers
                 return NotFound();
             }
 
+            // Saves the data of the object in the session
+            HttpContext.Session.SetInt32("ProjectId", projects.Id);
+            HttpContext.Session.SetString("ProjectTitle", projects.Title);
+
             return View(projects);
         }
 
@@ -144,11 +175,27 @@ namespace MyWebsite.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var projects = await _context.Projects.FindAsync(id);
+            var ProjectId = HttpContext.Session.GetInt32("ProjectId");
+            var ProjectTitle = HttpContext.Session.GetString("ProjectTitle");
+
+            // Are the data I received from the session corresponding to the object sent to the browser?
+            if (ProjectId == null || ProjectTitle.IsNullOrEmpty())
+            {
+                // Took too long to get the data from the session, or the session has expired
+                ModelState.AddModelError(string.Empty, "Project ID not found in session." + "You must restart the process");
+                return View(projects);
+            }
+
+            if (projects.Id != ProjectId || ProjectTitle != "Projects/Delete")
+            {
+                // The user is trying to delete a different project than the one that was loaded in the session
+                return RedirectToAction("Index");
+            }
+
             if (projects != null)
             {
                 _context.Projects.Remove(projects);
             }
-
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
