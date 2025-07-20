@@ -1,5 +1,6 @@
 ﻿namespace MyWebsite.Models
 {
+    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
     using System.ComponentModel.DataAnnotations;
 
     public class Tecnologies
@@ -14,11 +15,13 @@
         /// <summary>
         /// Name of the technology 
         /// </summary>
-        public string Name { get; set; }
+        [StringLength(100)]
+        public string Name { get; set; } = "";
 
         /// <summary>
         /// Navigation property to the projects
         /// </summary>
-        public ICollection<ProjectTecnologies> ProjectTecnologies { get; set; }
+        [ValidateNever]
+        public ICollection<ProjectTecnologies> ProjectTecnologies { get; set; } = new List<ProjectTecnologies>();
     }
 }
