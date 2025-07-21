@@ -26,7 +26,9 @@ namespace MyWebsite.Controllers
             _context = context;
         }
 
+
         // GET: Projects
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
