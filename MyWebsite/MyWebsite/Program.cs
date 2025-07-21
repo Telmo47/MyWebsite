@@ -10,6 +10,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Add support for Razor Pages if needed
+builder.Services.AddRazorPages();
+
+
 // Configure cookie policy
 builder.Services.AddSession(options =>
 {
@@ -46,11 +50,15 @@ app.UseRouting();
 
 app.UseSession(); // Enable session middleware
 
-app.UseAuthorization();
 app.UseAuthentication(); // Enable authentication middleware
+app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages(); // Enable Razor Pages if needed
+
 
 app.Run();
