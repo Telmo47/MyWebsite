@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 using MyWebsite.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyWebsite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProjectsController : Controller
     {
 
