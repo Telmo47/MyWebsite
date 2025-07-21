@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 using MyWebsite.Models;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyWebsite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProjectsController : Controller
     {
 
@@ -24,7 +26,9 @@ namespace MyWebsite.Controllers
             _context = context;
         }
 
+
         // GET: Projects
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());

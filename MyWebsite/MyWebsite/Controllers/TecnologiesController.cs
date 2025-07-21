@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MyWebsite.Models;
 
 namespace MyWebsite.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TecnologiesController : Controller
     {
 
@@ -24,6 +26,7 @@ namespace MyWebsite.Controllers
         }
 
         // GET: Tecnologies
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Tecnologies.ToListAsync());

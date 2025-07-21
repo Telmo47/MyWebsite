@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 
@@ -17,6 +18,14 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true; // Make the session cookie essential
 });
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => // it configures identity options
+{
+    options.SignIn.RequireConfirmedAccount = false; // Disable email confirmation for simplicity
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
 
 builder.Services.AddDistributedMemoryCache(); // Add distributed memory cache for session state
 
@@ -38,6 +47,7 @@ app.UseRouting();
 app.UseSession(); // Enable session middleware
 
 app.UseAuthorization();
+app.UseAuthentication(); // Enable authentication middleware
 
 app.MapControllerRoute(
     name: "default",
