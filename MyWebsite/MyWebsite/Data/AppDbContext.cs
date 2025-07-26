@@ -8,7 +8,7 @@ namespace MyWebsite.Data
     /// <summary>
     /// Database context for the application.
     /// </summary>
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
 
         /// <summary>
