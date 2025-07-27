@@ -13,7 +13,8 @@ namespace MyWebsite.Data.Seed
             ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContext));
 
             // 2. Creates the database if it does not exist
-            dbContext.Database.EnsureCreated();
+            await dbContext.Database.MigrateAsync();
+
 
             bool wasAdds = false;
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Models;
 
@@ -55,46 +56,7 @@ namespace MyWebsite.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed Role
-            var adminRoleId = "role-admin-id";
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole
-                {
-                    Id = adminRoleId,
-                    Name = "admin",
-                    NormalizedName = "ADMIN"
-                }
-            );
-
-            // Seed User
-            var adminUserId = "user-admin-id";
-            var hasher = new PasswordHasher<IdentityUser>();
-            var adminUser = new IdentityUser
-            {
-                Id = adminUserId,
-                UserName = "admin@mail.com",
-                NormalizedUserName = "ADMIN@MAIL.COM",
-                Email = "admin@mail.com",
-                NormalizedEmail = "ADMIN@MAIL.COM",
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                ConcurrencyStamp = Guid.NewGuid().ToString(),
-                PasswordHash = hasher.HashPassword(null, "Aa0_aa")
-            };
-
-            modelBuilder.Entity<IdentityUserRole<string>>()
-                .HasKey(r => new { r.UserId, r.RoleId }); 
-
-            
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string>
-                {
-                    UserId = "Admin",
-                    RoleId = "a"
-                });
-
-
-            
+            // Configuração apenas da relação ProjectTecnologies
             modelBuilder.Entity<ProjectTecnologies>()
                 .HasKey(pt => new { pt.ProjectId, pt.TecnologyId });
 
@@ -110,7 +72,6 @@ namespace MyWebsite.Data
         }
 
 
+
     }
-
-
 }
