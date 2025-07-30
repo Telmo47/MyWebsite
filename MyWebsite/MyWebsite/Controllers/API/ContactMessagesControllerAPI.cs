@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 using MyWebsite.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyWebsite.Controllers.API
 {
@@ -21,12 +22,14 @@ namespace MyWebsite.Controllers.API
         }
         // GET: api/ContactMessages
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<IEnumerable<ContactMessage>>> GetContactMessages()
         {
             return await _context.ContactMessages.ToListAsync();
         }
         // GET: api/ContactMessages/5
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<ContactMessage>> GetContactMessage(int id)
         {
             var contactMessage = await _context.ContactMessages.FindAsync(id);
@@ -47,6 +50,7 @@ namespace MyWebsite.Controllers.API
 
         // PUT: api/ContactMessages/5
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> PutContactMessage(int id, ContactMessage contactMessage)
         {
             if (id != contactMessage.Id)
@@ -74,6 +78,7 @@ namespace MyWebsite.Controllers.API
 
         // DELETE: api/ContactMessages/5
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public ActionResult DeleteContactMessage(int id)
         {
             var contactMessage = _context.ContactMessages.Find(id);
