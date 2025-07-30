@@ -26,6 +26,8 @@ namespace MyWebsite.Areas.Identity.Pages.Accounts
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
+        public string Username { get; internal set; }
+        public string Password { get; internal set; }
 
         public class InputModel
         {
