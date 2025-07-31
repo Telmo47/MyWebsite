@@ -1,40 +1,33 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyWebsite.Data;
 using Microsoft.OpenApi.Models;
+using MyWebsite.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-
-// Add support for Razor Pages if needed
 builder.Services.AddRazorPages();
 
-
-// Configure cookie policy
 builder.Services.AddSession(options =>
 {
-    // Set the session timeout to 30 minutes
-    options.IdleTimeout = TimeSpan.FromMinutes(60   );
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => // it configures identity options
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // Disable email confirmation for simplicity
+    options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddDistributedMemoryCache(); // Add distributed memory cache for session state
-
-// Swagger
+// --- Swagger ---
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -45,42 +38,34 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Middleware do Swagger
+// --- Middleware do Swagger ---
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyWebsite API v1");
-    c.RoutePrefix = "swagger"; // Apenas acessível em /swagger
+    c.RoutePrefix = "swagger"; // Apenas disponível em /swagger
 });
 
-
 app.UseRouting();
-
-app.UseSession(); // Enable session middleware
-
-app.UseAuthentication(); // Enable authentication middleware
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // Enable Razor Pages if needed
-
+app.MapRazorPages();
 
 app.Run();
