@@ -22,12 +22,21 @@ namespace MyWebsite.Controllers.API
             _context = context;
         }
         // GET: api/Projects
+        /// <summary>
+        /// get all the projects
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Projects>>> GetProjects()
         {
             return await _context.Projects.ToListAsync();
         }
         // GET: api/Projects/5
+        /// <summary>
+        /// get a project by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Projects>> GetProject(int id)
         {

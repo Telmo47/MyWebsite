@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,18 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => // it config
 
 builder.Services.AddDistributedMemoryCache(); // Add distributed memory cache for session state
 
+// Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MyWebsite API",
+        Version = "v1",
+        Description = "API para gestão de projetos, tecnologias e mensagens de contacto"
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,6 +58,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Middleware do Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyWebsite API v1");
+    c.RoutePrefix = "swagger"; // Apenas acessível em /swagger
+});
+
 
 app.UseRouting();
 
