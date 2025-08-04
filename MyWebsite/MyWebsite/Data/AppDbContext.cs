@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MyWebsite.Models;
 
 namespace MyWebsite.Data
@@ -7,7 +9,7 @@ namespace MyWebsite.Data
     /// <summary>
     /// Database context for the application.
     /// </summary>
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
 
         /// <summary>
@@ -17,6 +19,7 @@ namespace MyWebsite.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+
 
 
         }
@@ -42,6 +45,9 @@ namespace MyWebsite.Data
         public DbSet<Tecnologies> Tecnologies { get; set; }
 
 
+
+
+
         /// <summary>
         /// Function to configure the double key relationship between Projects and Tecnologies. Using fluent API.
         /// </summary>
@@ -50,6 +56,7 @@ namespace MyWebsite.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configuração apenas da relação ProjectTecnologies
             modelBuilder.Entity<ProjectTecnologies>()
                 .HasKey(pt => new { pt.ProjectId, pt.TecnologyId });
 
@@ -64,7 +71,7 @@ namespace MyWebsite.Data
                 .HasForeignKey(pt => pt.TecnologyId);
         }
 
+
+
     }
-
-
 }
