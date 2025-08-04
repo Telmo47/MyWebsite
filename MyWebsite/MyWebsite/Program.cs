@@ -2,68 +2,89 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyWebsite.Data;
 using MyWebsite.Data.Seed;
+using Website.Hubs; // Include your Hub namespace
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add DbContext using SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
+// Add MVC support
 builder.Services.AddControllersWithViews();
 
 // Add support for Razor Pages if needed
 builder.Services.AddRazorPages();
 
-
-// Configure cookie policy
+// Configure session state
 builder.Services.AddSession(options =>
 {
-    // Set the session timeout to 30 minutes
-    options.IdleTimeout = TimeSpan.FromMinutes(60   );
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
     options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => // it configures identity options
+// Add Identity with default token providers
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // Disable email confirmation for simplicity
+    options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+// Add in-memory cache for session
+builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddDistributedMemoryCache(); // Add distributed memory cache for session state
+// Add SignalR
+builder.Services.AddSignalR();
+
+// Add Swagger (optional, remove if you don't want it here)
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MyWebsite API",
+        Version = "v1",
+        Description = "API for managing projects, technologies, and contact messages"
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure error handling and HSTS for production
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-
 }
 
+// Use standard middlewares
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-app.UseSession(); // Enable session middleware
-
-app.UseAuthentication(); // Enable authentication middleware
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Enable Swagger (optional)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyWebsite API v1");
+    c.RoutePrefix = "swagger"; // Only show Swagger UI at /swagger
+});
 
+// Map controllers and Razor pages
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
 
-app.MapRazorPages(); // Enable Razor Pages if needed
+// Map SignalR hub
+app.MapHub<NotificationHub>("/notificationHub");
 
-await app.Services.SeedDataAsync(); // uses the extension method to seed the database
-
-
+// Seed the database
+await app.Services.SeedDataAsync();
 
 app.Run();
