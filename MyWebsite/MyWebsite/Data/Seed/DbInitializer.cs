@@ -9,55 +9,63 @@ namespace MyWebsite.Data.Seed
     {
         internal static async Task InitializeAsync(AppDbContext dbContext, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            // 1. Makes sure the provided services are not null
             ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContext));
 
-            // 2. Creates the database if it does not exist
+            // Ensure database exists
             await dbContext.Database.MigrateAsync();
-
 
             bool wasAdds = false;
 
-            // 3. Creation of the "admin" role if it does not exist
-            if (!await roleManager.RoleExistsAsync("admin"))
+            // 1. Create the "Admin" role (capital A) if it does not exist
+            const string adminRoleName = "Admin";
+            if (!await roleManager.RoleExistsAsync(adminRoleName))
             {
-                await roleManager.CreateAsync(new IdentityRole("admin"));
+                await roleManager.CreateAsync(new IdentityRole(adminRoleName));
                 wasAdds = true;
             }
 
-            // 4. Creation of the admin user if it does not exist
-            var adminUser = await userManager.FindByEmailAsync("admin@mail.com");
+            // 2. Create the admin user if it does not exist
+            var adminEmail = "admin@mail.com";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
             {
-                var user = new IdentityUser
+                adminUser = new IdentityUser
                 {
-                    UserName = "admin@mail.com",
-                    Email = "admin@mail.com",
+                    UserName = adminEmail,
+                    Email = adminEmail,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, "Aa0_aa");
+                var result = await userManager.CreateAsync(adminUser, "Aa0_aa");
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "admin");
+                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
+                    wasAdds = true;
+                }
+            }
+            else
+            {
+                // Ensure existing user has the "Admin" role
+                if (!await userManager.IsInRoleAsync(adminUser, adminRoleName))
+                {
+                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
                     wasAdds = true;
                 }
             }
 
-            // 5. Seeding the Projects table with initial data if it is empty
+            // 3. Seed Projects table if empty
             if (!dbContext.Projects.Any())
             {
                 var project = new Projects
                 {
                     Title = "GGData",
-                    Description = "My first Website ever developed, quite simple, a display of critics where one can criticise any game taht the admin gets in the website"
+                    Description = "My first Website ever developed, quite simple, a display of critics where one can criticise any game that the admin gets in the website"
                 };
 
                 await dbContext.Projects.AddAsync(project);
                 wasAdds = true;
             }
 
-            // 6. Saves changes to the database if there were any additions
             if (wasAdds)
             {
                 await dbContext.SaveChangesAsync();
