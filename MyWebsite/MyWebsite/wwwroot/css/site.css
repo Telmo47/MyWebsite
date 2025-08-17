@@ -18,5 +18,19 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background: #f8f9fa;
 }
+
+h1, h2, h3 {
+    font-family: "Segoe UI", sans-serif;
+}
+
+.card {
+    border-radius: 1rem;
+    transition: transform 0.2s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }

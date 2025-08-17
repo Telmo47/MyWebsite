@@ -2,7 +2,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center my-5">
+    <h1 class="display-4">Hi, I'm Telmo 👋</h1>
+    <p class="lead">Computer Engineering Student | Aspiring Software Developer</p>
 </div>
+
+<!-- React Portfolio Section -->
+<div id="portfolio-root"></div>
+
+@section Scripts {
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="~/js/react/Portfolio.js"></script>
+}
