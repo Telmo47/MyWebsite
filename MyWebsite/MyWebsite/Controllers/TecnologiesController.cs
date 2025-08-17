@@ -11,7 +11,7 @@ using MyWebsite.Models;
 
 namespace MyWebsite.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public class TecnologiesController : Controller
     {
 

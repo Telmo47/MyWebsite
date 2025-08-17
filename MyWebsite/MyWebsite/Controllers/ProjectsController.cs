@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MyWebsite.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "admin")]
     public class ProjectsController : Controller
     {
 
