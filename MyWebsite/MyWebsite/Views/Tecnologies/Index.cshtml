@@ -8,7 +8,7 @@
 
 <h1>Tecnologies</h1>
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("admin"))
 {
     <p>
         <a asp-action="Create">Create New</a>
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("admin"))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
