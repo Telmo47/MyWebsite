@@ -31,6 +31,17 @@ h1, h2, h3 {
     transition: transform 0.2s ease;
 }
 
-    .card:hover {
-        transform: translateY(-5px);
-    }
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.login-link {
+    color: #ffffff; 
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    color: #258cfb; 
+    cursor: pointer;
+}

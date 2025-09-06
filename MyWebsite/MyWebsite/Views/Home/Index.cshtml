@@ -2,15 +2,58 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center my-5">
+<!-- Hero Section -->
+<section id="about" class="text-center my-5">
+    <img src="~/images/me.png" alt="Profile photo" class="rounded-circle shadow mb-3" width="150" height="150" />
     <h1 class="display-4">Hi, I'm Telmo 👋</h1>
     <p class="lead">Computer Engineering Student | Aspiring Software Developer</p>
-</div>
+    <p>
+        I specialize in building modern web applications using <strong>ASP.NET Core</strong>, <strong>React</strong>, and <strong>SQL</strong>.
+        I love solving problems, designing clean UIs, and learning new technologies to improve my craft.
+    </p>
+</section>
 
-<!-- React Portfolio Section -->
-<div id="portfolio-root"></div>
+<!-- Projects Section -->
+<section id="projects" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">My Projects</h2>
+        <div id="portfolio-root"></div>
+    </div>
+</section>
+
+<!-- Technologies Section -->
+<section id="technologies" class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Technologies I Work With</h2>
+        <div class="row">
+            <div class="col-md-3"><img src="~/images/cs.jpg" width="60" /><p>C# / .NET</p></div>
+            <div class="col-md-3"><img src="~/images/react.jpg" width="60" /><p>React</p></div>
+            <div class="col-md-3"><img src="~/images/sql.png" width="60" /><p>SQL Server</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Contact Me</h2>
+        <form method="post" asp-controller="Home" asp-action="Contact">
+            <div class="mb-3">
+                <input type="text" class="form-control" name="Name" placeholder="Your Name" required />
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" name="Email" placeholder="Your Email" required />
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" name="Message" rows="5" placeholder="Your Message" required></textarea>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary">Send Message</button>
+            </div>
+        </form>
+    </div>
+</section>
 
 @section Scripts {
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/js/react/Portfolio.js"></script>
 }
